@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hành trình Việt Nam - Vườn cây Hòa Bình chuyển đổi Số</title>
+    <title>Hành trình Việt Nam - Vườn Cây Hòa Bình Số</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
@@ -18,7 +18,7 @@
         .nav-link { color: #666; border: none !important; font-weight: bold; text-transform: uppercase; font-size: 0.8rem; padding: 12px 20px; font-family: 'Orbitron', sans-serif; }
         .nav-link.active { background: var(--cyber-cyan) !important; color: #000 !important; box-shadow: 0 -5px 20px rgba(0, 242, 255, 0.4); }
 
-        /* Layout - PHẦN TẠO THÔNG ĐIỆP GIỮ NGUYÊN */
+        /* Layout */
         .main-wrapper { display: flex; flex-direction: row; height: calc(100vh - 55px); }
         .sidebar { width: 330px; background: #111; padding: 20px; overflow-y: auto; border-right: 1px solid #222; flex-shrink: 0; }
         .preview-area { flex-grow: 1; background: #000; display: flex; align-items: center; justify-content: center; padding: 20px; }
@@ -35,48 +35,54 @@
         .btn-garden { background: linear-gradient(45deg, #0066ff, var(--cyber-cyan)); color: #fff; }
         .btn-save { background: #222; color: #888; }
 
-        /* --- GIAO DIỆN VƯỜN CÂY CÔNG NGHỆ --- */
+        /* --- VƯỜN CÂY --- */
         .garden-container { 
             padding: 40px; background: radial-gradient(circle at center, #0a1a2f 0%, #000 100%); 
             min-height: 100%; position: relative; overflow-y: auto; display: flex; flex-direction: column;
         }
-        
-        .garden-stats { 
-            background: rgba(0,0,0,0.4); padding: 30px; border-radius: 20px; border: 1px solid var(--cyber-cyan); 
-            margin-bottom: 50px; position: relative; z-index: 2;
-        }
-        .garden-stats h2 { font-family: 'Orbitron', sans-serif; color: var(--cyber-cyan); text-shadow: 0 0 15px var(--cyber-cyan); }
+        .garden-stats { background: rgba(0,0,0,0.4); padding: 30px; border-radius: 20px; border: 1px solid rgba(0, 242, 255, 0.2); margin-bottom: 50px; }
+        .garden-stats h2 { font-family: 'Orbitron', sans-serif; color: var(--cyber-cyan); text-shadow: 0 0 15px var(--cyber-cyan); margin-bottom: 5px; }
+        .sub-founder { font-size: 0.8rem; color: #aaa; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
 
-        .garden-grid { 
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
-            gap: 40px; justify-items: center; position: relative; z-index: 2; flex-grow: 1;
-        }
+        .garden-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 60px 40px; justify-items: center; flex-grow: 1; }
         
-        /* Node Mầm Xanh */
         .tech-node { width: 120px; position: relative; cursor: pointer; transition: 0.4s; display: flex; flex-direction: column; align-items: center; }
+        .tech-node::after {
+            content: ''; position: absolute; bottom: 35px; width: 60px; height: 15px;
+            background: radial-gradient(ellipse at center, rgba(0, 242, 255, 0.5) 0%, transparent 70%);
+            border-radius: 50%; transform: scaleX(1.5); filter: blur(2px); z-index: 1;
+            animation: pulse-plate 3s infinite ease-in-out;
+        }
+        .mam-xanh-img { width: 85px; height: 85px; object-fit: contain; z-index: 2; filter: drop-shadow(0 0 10px var(--cyber-green)); animation: pulse-mam 3s infinite ease-in-out; }
+        .node-name { margin-top: 15px; font-family: 'Orbitron', sans-serif; font-size: 0.7rem; color: #fff; font-weight: bold; text-transform: uppercase; text-align: center; white-space: nowrap; width: 140px; overflow: hidden; text-overflow: ellipsis; }
+
+        /* MODAL CẤU HÌNH THẤP XUỐNG */
+        .modal-dialog { 
+            margin-top: 80px; /* Đẩy khung ảnh xuống thấp để lộ chữ phía sau */
+            max-width: 850px; 
+        }
+        .modal-content { background: #000 !important; border: 1px solid rgba(255,255,255,0.1) !important; box-shadow: 0 0 50px rgba(0, 0, 0, 1); border-radius: 15px; overflow: hidden; }
+        .modal-body { padding: 15px !important; display: flex; flex-direction: column; align-items: center; }
         
-        .mam-xanh-img {
-            width: 90px; height: 90px; object-fit: contain;
-            filter: drop-shadow(0 0 15px var(--cyber-green));
-            animation: pulse-mam 3s infinite ease-in-out;
+        #modalImg { 
+            width: 100%; 
+            max-height: 70vh; /* Giảm nhẹ chiều cao ảnh để nút Close không bị tràn */
+            object-fit: contain; 
+            border-radius: 8px;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: high-quality;
         }
 
-        .node-name {
-            margin-top: 12px; font-family: 'Orbitron', sans-serif;
-            font-size: 0.7rem; color: #fff; font-weight: bold;
-            text-transform: uppercase; letter-spacing: 1px; text-align: center;
-            white-space: nowrap; width: 140px; overflow: hidden; text-overflow: ellipsis;
+        .btn-close-interface {
+            background: #111; border: 1px solid #333; color: #888;
+            font-family: 'Orbitron'; font-size: 0.75rem; padding: 10px 30px;
+            margin-top: 20px; border-radius: 5px; transition: 0.3s;
+            text-transform: uppercase; letter-spacing: 2px;
         }
+        .btn-close-interface:hover { border-color: var(--cyber-cyan); color: var(--cyber-cyan); box-shadow: 0 0 15px var(--cyber-cyan); }
 
-        .tech-node:hover { transform: translateY(-10px) scale(1.1); }
-
-        /* FOOTER BẢN QUYỀN */
-        .copyright-footer {
-            margin-top: 50px; padding: 20px; border-top: 1px solid #222;
-            font-size: 0.7rem; color: #555; letter-spacing: 1px; text-transform: uppercase;
-        }
-
-        @keyframes pulse-mam { 0%, 100% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.1); opacity: 1; } }
+        @keyframes pulse-mam { 0%, 100% { transform: scale(1) translateY(0); } 50% { transform: scale(1.05) translateY(-5px); } }
+        @keyframes pulse-plate { 0%, 100% { transform: scaleX(1.5); opacity: 0.3; } 50% { transform: scaleX(2); opacity: 0.6; } }
 
         #loading { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center; }
     </style>
@@ -85,7 +91,7 @@
 
 <div id="loading">
     <div class="spinner-border text-info" style="width: 4rem; height: 4rem;"></div>
-    <div class="mt-4 text-info fw-bold" style="font-family: 'Orbitron';">SYNCHRONIZING DIGITAL SEEDS...</div>
+    <div class="mt-4 text-info fw-bold" style="font-family: 'Orbitron';">GENESIS HIGH-FIDELITY SEED...</div>
 </div>
 
 <ul class="nav nav-tabs" id="myTab">
@@ -104,7 +110,7 @@
                 <input type="text" id="inpProv" class="form-control" placeholder="Tỉnh / Thành phố">
                 <textarea id="inpMessage" class="form-control" rows="3" placeholder="Thông điệp hòa bình..."></textarea>
 
-                <div class="group-label">2. Cấu hình AI</div>
+                <div class="group-label">2. Cấu hình chỉnh ảnh</div>
                 <div class="row g-2">
                     <div class="col-6"><label>Trái / Phải</label><input type="range" id="avtX" min="-500" max="500" value="0"></div>
                     <div class="col-6"><label>Lên / Xuống</label><input type="range" id="avtY" min="-500" max="500" value="0"></div>
@@ -130,24 +136,21 @@
     <div class="tab-pane fade" id="garden-pane">
         <div class="garden-container text-center">
             <div class="garden-stats">
-                <h2 class="mb-3">VƯỜN CÂY HÒA BÌNH CHUYỂN ĐỔI SỐ</h2>
+                <h2>VƯỜN ƯƠM MẦM XANH HÒA BÌNH</h2>
+                <div class="sub-founder">Thuộc chuỗi dự án hành trình số Việt Nam my love - founder Đinh Thị Ngọc</div>
                 <p class="text-info fs-5">Hệ thống ghi nhận <b id="treeCount" style="font-size: 3rem; color: #fff;">0</b> mầm xanh đã kích hoạt</p>
             </div>
             <div class="garden-grid" id="gardenGrid"></div>
-            
-            <div class="copyright-footer">
-                Bản quyền thuộc chuỗi dự án hành trình số việt nam mylove - founder Đinh Thị Ngọc
-            </div>
         </div>
     </div>
 </div>
 
 <div class="modal fade" id="treeModal" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content bg-dark border-info">
-            <div class="modal-body p-1 text-center bg-black">
-                <img id="modalImg" src="" style="width: 100%; border-radius: 4px;">
-                <button class="btn btn-outline-info mt-3 mb-3 fw-bold" data-bs-dismiss="modal">CLOSE INTERFACE</button>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img id="modalImg" src="">
+                <button class="btn-close-interface" data-bs-dismiss="modal">CLOSE INTERFACE</button>
             </div>
         </div>
     </div>
@@ -155,7 +158,6 @@
 
 <canvas id="mainCanvas" style="display:none;"></canvas>
 <canvas id="tempCanvas" style="display:none;"></canvas>
-<!-- Canvas phụ để nén ảnh thumbnail -->
 <canvas id="thumbCanvas" style="display:none;"></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -259,10 +261,10 @@ document.onkeydown = function(e) {
         const msgWidth = parseInt(document.getElementById('msgWidth').value);
         const msgY = 365 + parseInt(document.getElementById('msgY').value);
         ctx.textAlign = "center";
-        ctx.fillStyle = "#ffff00"; ctx.font = "bold 34px Roboto"; ctx.fillText(name, 365, 730);
-        ctx.fillStyle = "#ffffff"; ctx.font = "italic 21px Roboto"; ctx.fillText(unit, 365, 770); ctx.fillText(prov, 365, 800);
+        ctx.fillStyle = "##ffff00"; ctx.font = "bold 34px Roboto"; ctx.fillText(name, 365, 730);
+        ctx.fillStyle = "#FFE4E1"; ctx.font = "italic 21px Roboto"; ctx.fillText(unit, 365, 770); ctx.fillText(prov, 365, 800);
         ctx.textAlign = "left"; ctx.fillStyle = "#5d1010"; ctx.font = `${msgSize}px Roboto`;
-        wrapJustifiedText(ctx, document.getElementById('inpMessage').value || "Thông điệp hòa bình...", 720, msgY, msgWidth, msgSize * 1.5);
+        wrapJustifiedText(ctx, document.getElementById('inpMessage').value || "Thông điệp hòa bình...", 690, msgY, msgWidth, msgSize * 1.5);
     }
 
     function wrapJustifiedText(context, text, x, y, maxWidth, lineHeight) {
@@ -299,12 +301,10 @@ document.onkeydown = function(e) {
         items.forEach(item => {
             const div = document.createElement('div');
             div.className = "tech-node";
-            div.innerHTML = `
-                <img src="${LOGO_MAM}" class="mam-xanh-img">
-                <div class="node-name">${toTitleCase(item.hoten)}</div>
-            `;
+            div.innerHTML = `<img src="${LOGO_MAM}" class="mam-xanh-img"><div class="node-name">${toTitleCase(item.hoten)}</div>`;
             div.onclick = () => {
-                document.getElementById('modalImg').src = item.imgData;
+                const mImg = document.getElementById('modalImg');
+                mImg.src = item.imgData;
                 new bootstrap.Modal(document.getElementById('treeModal')).show();
             };
             grid.appendChild(div);
@@ -316,20 +316,21 @@ document.onkeydown = function(e) {
         if(!nameVal) return alert("Vui lòng nhập tên!");
         document.getElementById('loading').style.display = 'flex';
         
-        // --- LOGIC THU NHỎ ẢNH ĐỂ GIẢM ĐỘ DÀI CHUỖI SHEET ---
         const thumbCanvas = document.getElementById('thumbCanvas');
         const tctx = thumbCanvas.getContext('2d');
-        // Kích thước nén (vừa đủ xem trên mobile)
-        thumbCanvas.width = 600; 
-        thumbCanvas.height = 450;
+        const MAX_WIDTH = 1500; 
+        const scale = MAX_WIDTH / canvas.width;
+        thumbCanvas.width = MAX_WIDTH;
+        thumbCanvas.height = canvas.height * scale;
+
+        tctx.imageSmoothingEnabled = true;
+        tctx.imageSmoothingQuality = 'high';
         tctx.drawImage(canvas, 0, 0, thumbCanvas.width, thumbCanvas.height);
-        const imgDataShort = thumbCanvas.toDataURL('image/jpeg', 0.4); // Chất lượng 0.4 cực gọn
+        const imgDataShort = thumbCanvas.toDataURL('image/jpeg', 0.92); 
 
         const payload = { 
-            hoten: nameVal, 
-            donvi: document.getElementById('inpUnit').value, 
-            tinh: document.getElementById('inpProv').value, 
-            thongdiep: document.getElementById('inpMessage').value, 
+            hoten: nameVal, donvi: document.getElementById('inpUnit').value, 
+            tinh: document.getElementById('inpProv').value, thongdiep: document.getElementById('inpMessage').value, 
             imgData: imgDataShort 
         };
 
@@ -346,10 +347,9 @@ document.onkeydown = function(e) {
     function downloadImage() {
         const link = document.createElement('a');
         link.download = `HanhTrinhSo_${Date.now()}.jpg`;
-        link.href = canvas.toDataURL('image/jpeg', 1.0); // Tải về máy vẫn giữ chất lượng cao nhất
+        link.href = canvas.toDataURL('image/jpeg', 1.0); 
         link.click();
     }
-
     document.querySelectorAll('input, textarea').forEach(el => el.oninput = update);
 </script>
 </body>
