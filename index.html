@@ -22,7 +22,7 @@
         .main-wrapper { display: flex; flex-direction: row; height: calc(100vh - 55px); }
         .sidebar { width: 330px; background: #111; padding: 20px; overflow-y: auto; border-right: 1px solid #222; flex-shrink: 0; }
         .preview-area { flex-grow: 1; background: #000; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        #previewImg { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 0 50px rgba(0,0,0,0.9); border-radius: 8px; }
+        #previewImg { max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 0 50px rgba(0,0,0,0.9); border-radius: 8px; image-rendering: -webkit-optimize-contrast; }
 
         @media (max-width: 992px) { .main-wrapper { flex-direction: column; height: auto; } .sidebar { width: 100%; border-right: none; } .preview-area { height: 60vh; } }
 
@@ -58,7 +58,7 @@
 
         /* MODAL CẤU HÌNH THẤP XUỐNG */
         .modal-dialog { 
-            margin-top: 80px; /* Đẩy khung ảnh xuống thấp để lộ chữ phía sau */
+            margin-top: 80px; 
             max-width: 850px; 
         }
         .modal-content { background: #000 !important; border: 1px solid rgba(255,255,255,0.1) !important; box-shadow: 0 0 50px rgba(0, 0, 0, 1); border-radius: 15px; overflow: hidden; }
@@ -66,11 +66,11 @@
         
         #modalImg { 
             width: 100%; 
-            max-height: 70vh; /* Giảm nhẹ chiều cao ảnh để nút Close không bị tràn */
+            max-height: 70vh; 
             object-fit: contain; 
             border-radius: 8px;
             image-rendering: -webkit-optimize-contrast;
-            image-rendering: high-quality;
+            image-rendering: auto;
         }
 
         .btn-close-interface {
@@ -162,23 +162,18 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// Chặn chuột phải
+// Chặn chuột phải & Phím tắt
 document.addEventListener('contextmenu', event => event.preventDefault());
-
-// Chặn phím tắt F12, Ctrl+Shift+I, Ctrl+U (xem source)
 document.onkeydown = function(e) {
-    if (e.keyCode == 123) return false; // F12
-    if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false;
-    if (e.ctrlKey && e.shiftKey && e.charCodeAt(0) == 'C'.charCodeAt(0)) return false;
-    if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false;
-    if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+    if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 67 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false;
 }
+
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmdZRqmQLtPmr6JvkUGyrk-wU1YQj-GcA4Yhf4JuqJfMix4jWkUWkRKxTllCUOM4FQ/exec"; 
     const BG_URL = "https://lh3.googleusercontent.com/d/1cRbxHdO493piuTnWIEK8qJhOMyQvw9DU";
     const LOGO_MAM = "https://lh3.googleusercontent.com/d/1jgDhcCF-679rlFneGkZbFr2s56hatIHz";
 
     const canvas = document.getElementById('mainCanvas');
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: false }); // Tối ưu vẽ
     const previewImg = document.getElementById('previewImg');
     let bgImg = new Image();
     let processedUserCanvas = null;
@@ -227,6 +222,8 @@ document.onkeydown = function(e) {
 
     function update() {
         if(!bgImg.complete) return;
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(bgImg, 0, 0);
         if(processedUserCanvas) {
@@ -239,6 +236,8 @@ document.onkeydown = function(e) {
             const clipCanvas = document.createElement('canvas');
             clipCanvas.width = w; clipCanvas.height = h;
             const clipCtx = clipCanvas.getContext('2d');
+            clipCtx.imageSmoothingEnabled = true;
+            clipCtx.imageSmoothingQuality = 'high';
             clipCtx.drawImage(processedUserCanvas, 0, 0, w, h);
             clipCtx.globalCompositeOperation = 'destination-in';
             const grad = clipCtx.createLinearGradient(0, 0, 0, h);
@@ -250,7 +249,7 @@ document.onkeydown = function(e) {
             ctx.restore();
         }
         drawText();
-        previewImg.src = canvas.toDataURL('image/jpeg', 0.85);
+        previewImg.src = canvas.toDataURL('image/jpeg', 0.95); // Tăng chất lượng preview
     }
 
     function drawText() {
@@ -261,7 +260,7 @@ document.onkeydown = function(e) {
         const msgWidth = parseInt(document.getElementById('msgWidth').value);
         const msgY = 365 + parseInt(document.getElementById('msgY').value);
         ctx.textAlign = "center";
-        ctx.fillStyle = "##ffff00"; ctx.font = "bold 34px Roboto"; ctx.fillText(name, 365, 730);
+        ctx.fillStyle = "#ffff00"; ctx.font = "bold 34px Roboto"; ctx.fillText(name, 365, 730);
         ctx.fillStyle = "#FFE4E1"; ctx.font = "italic 21px Roboto"; ctx.fillText(unit, 365, 770); ctx.fillText(prov, 365, 800);
         ctx.textAlign = "left"; ctx.fillStyle = "#5d1010"; ctx.font = `${msgSize}px Roboto`;
         wrapJustifiedText(ctx, document.getElementById('inpMessage').value || "Thông điệp hòa bình...", 690, msgY, msgWidth, msgSize * 1.5);
@@ -318,7 +317,7 @@ document.onkeydown = function(e) {
         
         const thumbCanvas = document.getElementById('thumbCanvas');
         const tctx = thumbCanvas.getContext('2d');
-        const MAX_WIDTH = 1500; 
+        const MAX_WIDTH = 3000; // 
         const scale = MAX_WIDTH / canvas.width;
         thumbCanvas.width = MAX_WIDTH;
         thumbCanvas.height = canvas.height * scale;
@@ -326,7 +325,7 @@ document.onkeydown = function(e) {
         tctx.imageSmoothingEnabled = true;
         tctx.imageSmoothingQuality = 'high';
         tctx.drawImage(canvas, 0, 0, thumbCanvas.width, thumbCanvas.height);
-        const imgDataShort = thumbCanvas.toDataURL('image/jpeg', 0.92); 
+        const imgDataShort = thumbCanvas.toDataURL('image/jpeg', 1); // Tăng chất lượng file gửi đi
 
         const payload = { 
             hoten: nameVal, donvi: document.getElementById('inpUnit').value, 
@@ -347,7 +346,7 @@ document.onkeydown = function(e) {
     function downloadImage() {
         const link = document.createElement('a');
         link.download = `HanhTrinhSo_${Date.now()}.jpg`;
-        link.href = canvas.toDataURL('image/jpeg', 1.0); 
+        link.href = canvas.toDataURL('image/jpeg', 0.98); // Chất lượng tối đa khi tải về
         link.click();
     }
     document.querySelectorAll('input, textarea').forEach(el => el.oninput = update);
