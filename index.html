@@ -168,7 +168,7 @@ document.onkeydown = function(e) {
     if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 67 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false;
 }
 
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmdZRqmQLtPmr6JvkUGyrk-wU1YQj-GcA4Yhf4JuqJfMix4jWkUWkRKxTllCUOM4FQ/exec"; 
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhGLqz2tRUqDwdQ5E1q_AzBOvv26jiKA-9NvIdWrHdCY9WBkPBkh9aF74--auZ8T86/exec"; 
     const BG_URL = "https://lh3.googleusercontent.com/d/1cRbxHdO493piuTnWIEK8qJhOMyQvw9DU";
     const LOGO_MAM = "https://lh3.googleusercontent.com/d/1jgDhcCF-679rlFneGkZbFr2s56hatIHz";
 
@@ -311,21 +311,25 @@ document.onkeydown = function(e) {
     }
 
     async function addToGarden() {
-        const nameVal = document.getElementById('inpName').value;
-        if(!nameVal) return alert("Vui lòng nhập tên!");
-        document.getElementById('loading').style.display = 'flex';
-        
-        const thumbCanvas = document.getElementById('thumbCanvas');
-        const tctx = thumbCanvas.getContext('2d');
-        const MAX_WIDTH = 3000; // 
-        const scale = MAX_WIDTH / canvas.width;
-        thumbCanvas.width = MAX_WIDTH;
-        thumbCanvas.height = canvas.height * scale;
+    const nameVal = document.getElementById('inpName').value;
+    if(!nameVal) return alert("Vui lòng nhập tên!");
+    document.getElementById('loading').style.display = 'flex';
+    
+    const thumbCanvas = document.getElementById('thumbCanvas');
+    const tctx = thumbCanvas.getContext('2d');
+    
+    // Giảm xuống 1200 để cân bằng giữa độ nét và tốc độ tải
+    const MAX_WIDTH = 1200; 
+    const scale = MAX_WIDTH / canvas.width;
+    thumbCanvas.width = MAX_WIDTH;
+    thumbCanvas.height = canvas.height * scale;
 
-        tctx.imageSmoothingEnabled = true;
-        tctx.imageSmoothingQuality = 'high';
-        tctx.drawImage(canvas, 0, 0, thumbCanvas.width, thumbCanvas.height);
-        const imgDataShort = thumbCanvas.toDataURL('image/jpeg', 1); // Tăng chất lượng file gửi đi
+    tctx.imageSmoothingEnabled = true;
+    tctx.imageSmoothingQuality = 'high';
+    tctx.drawImage(canvas, 0, 0, thumbCanvas.width, thumbCanvas.height);
+    
+    // Chất lượng 0.8 là quá đủ cho web
+    const imgDataShort = thumbCanvas.toDataURL('image/jpeg', 0.8); 
 
         const payload = { 
             hoten: nameVal, donvi: document.getElementById('inpUnit').value, 
